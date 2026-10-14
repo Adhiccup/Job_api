@@ -1,4 +1,3 @@
-
 export const JOB_SEARCH_CONFIG = {
   postedWithinDays: 1,
   requestDelayMs: 2000,
@@ -6,10 +5,63 @@ export const JOB_SEARCH_CONFIG = {
   remoteOnly: true,
 
   countries: [
+    "Austria",
+    "Belgium",
+    "France",
     "Germany",
-    "United Kingdom",
+    "Liechtenstein",
+    "Luxembourg",
+    "Monaco",
+    "Netherlands",
+    "Switzerland",
+
+    // Northern Europe
+    "Denmark",
+    "Estonia",
+    "Finland",
+    "Iceland",
     "Ireland",
+    "Latvia",
+    "Lithuania",
+    "Norway",
+    "Sweden",
+    "United Kingdom",
+
+    // Southern Europe
+    "Albania",
+    "Andorra",
+    "Bosnia and Herzegovina",
+    "Croatia",
+    "Greece",
     "Italy",
+    "Malta",
+    "Montenegro",
+    "North Macedonia",
+    "Portugal",
+    "San Marino",
+    "Serbia",
+    "Slovenia",
+    "Spain",
+    "Vatican City",
+
+    // Eastern Europe
+    "Belarus",
+    "Bulgaria",
+    "Czech Republic",
+    "Hungary",
+    "Moldova",
+    "Poland",
+    "Romania",
+    "Russia",
+    "Slovakia",
+    "Ukraine",
+
+    // Transcontinental
+    "Azerbaijan",
+    "Cyprus",
+    "Georgia",
+    "Kazakhstan",
+    "Turkey",
   ],
 
   searchTerms: [
