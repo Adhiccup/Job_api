@@ -1,6 +1,7 @@
 import { JobStatus, type PrismaClient } from "@prisma/client";
 import { matchJob, toJobScoreUpdate } from "../matching/jobMatcher.js";
 import type { ImportableJob } from "./types.js";
+import { checkJobPreferences } from "./jobPreferenceFilter.js";
 
 export type SaveImportedJobResult = {
   saved: boolean;
@@ -11,6 +12,20 @@ export async function saveImportedJob(
   prisma: PrismaClient,
   job: ImportableJob,
 ): Promise<SaveImportedJobResult> {
+  const preference = checkJobPreferences(job);
+
+  if (!preference.accepted) {
+    console.log(
+      `[Job Filter] Rejected: ${job.title} | ` +
+        `${job.companyName ?? "Unknown"} | ` +
+        `${preference.reason}`,
+    );
+
+    return {
+      saved: false,
+      active: false,
+    };
+  }
   const match = matchJob(job);
   if (!match.accepted) {
     return {

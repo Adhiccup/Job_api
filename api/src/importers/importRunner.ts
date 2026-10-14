@@ -5,13 +5,22 @@ import { fetchLinkedInJobs, isLinkedInSource } from "./linkedinImporter.js";
 import { fetchPublicApiJobs, isPublicApiSource } from "./publicApiImporters.js";
 import { fetchRemoteOkJobs, isRemoteOkSource } from "./remoteOkImporter.js";
 import { fetchRssJobs } from "./rssImporter.js";
-import type { ImportableJob, ImportSource, JobImportSummary, SourceImportResult } from "./types.js";
+import type {
+  ImportableJob,
+  ImportSource,
+  JobImportSummary,
+  SourceImportResult,
+} from "./types.js";
+import {
+  fetchHiringCafeMcpJobs,
+  isHiringCafeMcpSource,
+} from "./hiringCafeMcpImporter.js";
 
 export async function runJobImport(): Promise<JobImportSummary> {
   const startedAt = new Date();
   const sources = await prisma.jobSource.findMany({
     where: { enabled: true },
-    orderBy: { name: "asc" }
+    orderBy: { name: "asc" },
   });
   const sourceResults: SourceImportResult[] = [];
 
@@ -30,7 +39,7 @@ export async function runJobImport(): Promise<JobImportSummary> {
     activeCount: sum(sourceResults, "activeCount"),
     hiddenCount: sum(sourceResults, "hiddenCount"),
     skippedCount: sum(sourceResults, "skippedCount"),
-    errorCount: sum(sourceResults, "errorCount")
+    errorCount: sum(sourceResults, "errorCount"),
   };
 }
 
@@ -43,7 +52,11 @@ async function importSource(source: ImportSource): Promise<SourceImportResult> {
   }
 
   try {
-    const jobs = await withTimeout(fetchJobsForSource(source), 30000, `Timed out importing ${source.name}`);
+    const jobs = await withTimeout(
+      fetchJobsForSource(source),
+      30000,
+      `Timed out importing ${source.name}`,
+    );
     result.fetchedCount = jobs.length;
 
     for (const job of jobs) {
@@ -67,7 +80,7 @@ async function importSource(source: ImportSource): Promise<SourceImportResult> {
 
     await prisma.jobSource.update({
       where: { id: source.id },
-      data: { lastFetchedAt: new Date() }
+      data: { lastFetchedAt: new Date() },
     });
   } catch (error) {
     result.errorCount += 1;
@@ -80,11 +93,17 @@ async function importSource(source: ImportSource): Promise<SourceImportResult> {
 function hasImporter(source: ImportSource): boolean {
   return (
     source.type === JobSourceType.RSS ||
-    (source.type === JobSourceType.API && (isRemoteOkSource(source) || isPublicApiSource(source) || isLinkedInSource(source)))
+    (source.type === JobSourceType.API &&
+      (isRemoteOkSource(source) ||
+        isPublicApiSource(source) ||
+        isLinkedInSource(source) ||
+        isHiringCafeMcpSource(source)))
   );
 }
 
-async function fetchJobsForSource(source: ImportSource): Promise<ImportableJob[]> {
+async function fetchJobsForSource(
+  source: ImportSource,
+): Promise<ImportableJob[]> {
   if (source.type === JobSourceType.RSS) {
     return fetchRssJobs(source);
   }
@@ -101,6 +120,10 @@ async function fetchJobsForSource(source: ImportSource): Promise<ImportableJob[]
     return fetchLinkedInJobs(source);
   }
 
+  if (source.type === JobSourceType.API && isHiringCafeMcpSource(source)) {
+    return fetchHiringCafeMcpJobs(source);
+  }
+
   return [];
 }
 
@@ -114,11 +137,22 @@ function createSourceResult(source: ImportSource): SourceImportResult {
     hiddenCount: 0,
     skippedCount: 0,
     errorCount: 0,
-    errors: []
+    errors: [],
   };
 }
 
-function sum(results: SourceImportResult[], key: keyof Pick<SourceImportResult, "activeCount" | "errorCount" | "fetchedCount" | "hiddenCount" | "savedCount" | "skippedCount">): number {
+function sum(
+  results: SourceImportResult[],
+  key: keyof Pick<
+    SourceImportResult,
+    | "activeCount"
+    | "errorCount"
+    | "fetchedCount"
+    | "hiddenCount"
+    | "savedCount"
+    | "skippedCount"
+  >,
+): number {
   return results.reduce((total, result) => total + result[key], 0);
 }
 
@@ -155,7 +189,11 @@ function errorToMessage(error: unknown): string {
   return String(error) || "Unknown import error";
 }
 
-function withTimeout<T>(promise: Promise<T>, timeoutMs: number, message: string): Promise<T> {
+function withTimeout<T>(
+  promise: Promise<T>,
+  timeoutMs: number,
+  message: string,
+): Promise<T> {
   return new Promise((resolve, reject) => {
     const timeout = setTimeout(() => reject(new Error(message)), timeoutMs);
 
