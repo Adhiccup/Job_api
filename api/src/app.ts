@@ -3,7 +3,6 @@ import express, { type NextFunction, type Request, type Response } from "express
 import { healthRoutes } from "./routes/healthRoutes.js";
 import { importRoutes } from "./routes/importRoutes.js";
 import { jobRoutes } from "./routes/jobRoutes.js";
-import { resumeAnalysisRoutes } from "./routes/resumeAnalysisRoutes.js";
 import { sourceRoutes } from "./routes/sourceRoutes.js";
 
 export const app = express();
@@ -19,7 +18,6 @@ app.use(express.json());
 app.use(healthRoutes);
 app.use(jobRoutes);
 app.use(sourceRoutes);
-app.use(resumeAnalysisRoutes);
 app.use(importRoutes);
 
 app.use((_req: Request, res: Response) => {

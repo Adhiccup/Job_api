@@ -2,51 +2,17 @@ import { Building2, CalendarClock, ExternalLink, Flame, MapPin, RadioTower, Scan
 import { useState, type ChangeEvent } from "react";
 import type { Job } from "../lib/jobs";
 import { formatPublishedDate, getMatchedKeywords, getRegionFit, isUrgentHiringJob } from "../lib/jobs";
-import { analyzeResumeForJob, type ResumeAnalysisResult } from "../lib/resumeAnalysis";
-import { ResumeAnalysisModal } from "./ResumeAnalysisModal";
 
 type JobCardProps = {
   job: Job;
 };
 
 export function JobCard({ job }: JobCardProps) {
-  const [resumeFile, setResumeFile] = useState<File | null>(null);
-  const [analysis, setAnalysis] = useState<ResumeAnalysisResult | null>(null);
-  const [analysisError, setAnalysisError] = useState<string | null>(null);
-  const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [isAnalysisOpen, setIsAnalysisOpen] = useState(false);
   const regionFit = getRegionFit(job);
   const matchedKeywords = getMatchedKeywords(job);
   const scoreTone = getScoreTone(job.totalScore);
   const isLinkedIn = job.source.name.toLowerCase().includes("linkedin");
   const isUrgent = isUrgentHiringJob(job);
-
-  function handleResumeChange(event: ChangeEvent<HTMLInputElement>) {
-    const nextFile = event.target.files?.[0] ?? null;
-    setResumeFile(nextFile);
-    setAnalysis(null);
-    setAnalysisError(null);
-  }
-
-  async function handleAnalyzeResume() {
-    if (!resumeFile) {
-      setAnalysisError("Upload a resume file first.");
-      return;
-    }
-
-    setIsAnalyzing(true);
-    setAnalysisError(null);
-
-    try {
-      const nextAnalysis = await analyzeResumeForJob(job, resumeFile);
-      setAnalysis(nextAnalysis);
-      setIsAnalysisOpen(true);
-    } catch (error) {
-      setAnalysisError(error instanceof Error ? error.message : "Unable to analyze resume.");
-    } finally {
-      setIsAnalyzing(false);
-    }
-  }
 
   return (
     <>
@@ -112,33 +78,6 @@ export function JobCard({ job }: JobCardProps) {
         </div>
 
         <div className="job-card__actions">
-          <div className={`score-pill score-pill--${scoreTone}`} aria-label={`Match score ${job.totalScore} out of 100`}>
-            <span>{job.totalScore}</span>
-            <small>match</small>
-          </div>
-
-          <div className="resume-analyzer">
-            <label className="resume-upload">
-              <input
-                type="file"
-                accept=".pdf,.docx,.txt,.md,.html,.htm,.json,.csv,.rtf,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/*"
-                onChange={handleResumeChange}
-              />
-              <UploadCloud size={16} aria-hidden="true" />
-              <span>{resumeFile ? "Resume selected" : "Upload resume"}</span>
-            </label>
-            <small title={resumeFile?.name}>{resumeFile?.name ?? "PDF, DOCX, TXT"}</small>
-            <button className="analyse-button" type="button" onClick={handleAnalyzeResume} disabled={!resumeFile || isAnalyzing}>
-              <ScanSearch size={16} aria-hidden="true" />
-              {isAnalyzing ? "Analysing" : "Analyse"}
-            </button>
-            {analysis ? (
-              <button className="analysis-view-button" type="button" onClick={() => setIsAnalysisOpen(true)}>
-                View report
-              </button>
-            ) : null}
-            {analysisError ? <p className="resume-analyzer__error">{analysisError}</p> : null}
-          </div>
 
           <a className="apply-button" href={job.applyUrl} target="_blank" rel="noreferrer">
             <ExternalLink size={17} aria-hidden="true" />
@@ -146,10 +85,6 @@ export function JobCard({ job }: JobCardProps) {
           </a>
         </div>
       </article>
-
-      {analysis && isAnalysisOpen ? (
-        <ResumeAnalysisModal analysis={analysis} job={job} resumeFile={resumeFile} onClose={() => setIsAnalysisOpen(false)} />
-      ) : null}
     </>
   );
 }

@@ -1317,42 +1317,6 @@ h1 {
   background: var(--coral-soft);
 }
 
-.score-pill {
-  display: grid;
-  flex: 0 0 auto;
-  width: 64px;
-  height: 54px;
-  place-items: center;
-  border-radius: 8px;
-  color: #ffffff;
-  background: var(--gold);
-  font-weight: 850;
-  line-height: 1;
-}
-
-.score-pill span {
-  margin-top: 5px;
-  font-size: 1.08rem;
-}
-
-.score-pill small {
-  margin-top: -5px;
-  font-size: 0.66rem;
-  text-transform: uppercase;
-}
-
-.score-pill--strong {
-  background: var(--green);
-}
-
-.score-pill--steady {
-  background: var(--teal);
-}
-
-.score-pill--low {
-  background: var(--gold);
-}
-
 .job-card__heading {
   display: grid;
   gap: 7px;
@@ -1444,104 +1408,6 @@ h1 {
   align-items: flex-end;
   justify-content: space-between;
   gap: 16px;
-}
-
-.resume-analyzer {
-  display: grid;
-  width: 100%;
-  gap: 7px;
-  padding: 10px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: var(--panel-soft);
-}
-
-.resume-upload {
-  display: inline-flex;
-  min-height: 36px;
-  align-items: center;
-  justify-content: center;
-  gap: 7px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  color: var(--teal);
-  background: var(--input-bg);
-  font-size: 0.8rem;
-  font-weight: 850;
-  cursor: pointer;
-}
-
-.resume-upload:hover {
-  border-color: var(--teal);
-  box-shadow: 0 8px 18px rgba(15, 118, 110, 0.1);
-}
-
-.resume-upload input {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  opacity: 0;
-  pointer-events: none;
-}
-
-.resume-analyzer small {
-  display: block;
-  min-width: 0;
-  overflow: hidden;
-  color: var(--subtle);
-  font-size: 0.72rem;
-  font-weight: 750;
-  text-align: center;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.analyse-button,
-.analysis-view-button {
-  display: inline-flex;
-  min-height: 36px;
-  align-items: center;
-  justify-content: center;
-  gap: 7px;
-  border-radius: 8px;
-  font-size: 0.8rem;
-  font-weight: 850;
-  cursor: pointer;
-}
-
-.analyse-button {
-  border: 0;
-  color: #ffffff;
-  background: linear-gradient(135deg, var(--teal), var(--sky));
-}
-
-.analyse-button:hover:not(:disabled) {
-  box-shadow: 0 10px 22px rgba(15, 118, 110, 0.18);
-  transform: translateY(-1px);
-}
-
-.analyse-button:disabled {
-  color: var(--subtle);
-  background: var(--chip-bg);
-  cursor: not-allowed;
-}
-
-.analysis-view-button {
-  border: 1px solid var(--line);
-  color: var(--teal);
-  background: var(--input-bg);
-}
-
-.analysis-view-button:hover {
-  border-color: var(--teal);
-}
-
-.resume-analyzer__error {
-  color: var(--rose);
-  font-size: 0.72rem;
-  font-weight: 750;
-  line-height: 1.35;
-  text-align: center;
 }
 
 .apply-button:hover {
@@ -2333,10 +2199,6 @@ h1 {
   .job-card__actions {
     grid-template-columns: 1fr;
     align-items: stretch;
-  }
-
-  .score-pill {
-    align-self: flex-start;
   }
 
   .apply-button {

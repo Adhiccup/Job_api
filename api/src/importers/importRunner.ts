@@ -5,6 +5,7 @@ import { fetchLinkedInJobs, isLinkedInSource } from "./linkedinImporter.js";
 import { fetchPublicApiJobs, isPublicApiSource } from "./publicApiImporters.js";
 import { fetchRemoteOkJobs, isRemoteOkSource } from "./remoteOkImporter.js";
 import { fetchRssJobs } from "./rssImporter.js";
+import { performance } from "node:perf_hooks";
 import type {
   ImportableJob,
   ImportSource,
@@ -123,6 +124,7 @@ async function fetchJobsForSource(
   if (source.type === JobSourceType.API && isHiringCafeMcpSource(source)) {
     return fetchHiringCafeMcpJobs(source);
   }
+  
 
   return [];
 }

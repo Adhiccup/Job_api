@@ -74,7 +74,7 @@ export const JOB_SEARCH_CONFIG = {
   // Companies you do not want
   excludedCompanies: [
     "codekeeper",
-    "work and travel guid",
+    "work and travel guide",
     "elevenlabs",
     "qonto",
     "turing",
