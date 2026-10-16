@@ -35,8 +35,8 @@ export async function fetchHiringCafeMcpJobs(
   // Start with a small test:
   // Change to config.searchTerms and config.countries
   // after confirming all searches work.
-  const searchTerms = config.searchTerms.slice(0, 2);
-  const locations = config.countries.slice(0, 2);
+  const searchTerms = config.searchTerms;
+  const locations = config.countries;
 
   const allJobs: ImportableJob[] = [];
   const seenJobs = new Set<string>();
