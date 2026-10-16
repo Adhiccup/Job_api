@@ -2,7 +2,6 @@ import axios from "axios";
 import { load } from "cheerio";
 import type { ImportableJob, ImportSource } from "./types.js";
 import { cleanString, cleanStringArray, normalizeApplyUrl, parseDate } from "./normalization.js";
-import { measureJobSource } from "./performance.js";
 
 const linkedInGuestSearchUrl = "https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search";
 const linkedInUserAgent = "Job tracker";
