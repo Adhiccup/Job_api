@@ -45,7 +45,6 @@ export const JOB_SEARCH_CONFIG = {
   // Job titles to reject
   excludedTitlePatterns: [
     /\bprincipal\b/i,
-    /\bstaff\b/i,
     /\bjunior\b/i,
     /\bapplied[\s-]*ai\b/i,
     /\bplatform engineer(?:ing)?\b/i,
